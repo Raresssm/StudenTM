@@ -263,25 +263,28 @@ export default function WeeklyCalendar({
                 onClick={() => onTaskClick(task)}
               >
                 <div className="flex items-start gap-3">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onTaskToggleComplete(task.id);
-                    }}
-                    className="mt-0.5 flex-shrink-0"
-                  >
-                    {task.completed ? (
-                      <CheckCircle2
-                        className="text-green-600 dark:text-green-400"
-                        size={24}
-                      />
-                    ) : (
-                      <Circle
-                        className="text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400"
-                        size={24}
-                      />
-                    )}
-                  </button>
+                  {/* Only show checkbox for personal tasks */}
+                  {task.type === "personal" ? (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onTaskToggleComplete(task.id);
+                      }}
+                      className="mt-0.5 flex-shrink-0 transition-transform duration-200 hover:scale-110 active:scale-95"
+                    >
+                      {task.completed ? (
+                        <CheckCircle2
+                          className="text-green-600 dark:text-green-400 transition-all duration-300 animate-[checkPop_0.3s_ease-out]"
+                          size={24}
+                        />
+                      ) : (
+                        <Circle
+                          className="text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
+                          size={24}
+                        />
+                      )}
+                    </button>
+                  ) : null}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-2">
                       {task.type === "exam" ? (

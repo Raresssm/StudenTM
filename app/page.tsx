@@ -69,22 +69,7 @@ export default function Home() {
     loadTasks();
   }, [user, authLoading]);
 
-  // Save tasks to Supabase whenever tasks change (debounced)
-  useEffect(() => {
-    if (authLoading || !user || loading) return;
-
-    const timeoutId = setTimeout(async () => {
-      try {
-        await saveTasks(tasks);
-        console.log("✅ Saved tasks to Supabase:", tasks.length, "tasks");
-      } catch (error) {
-        console.error("❌ Error saving tasks to Supabase:", error);
-        showToast("Failed to save tasks", "error");
-      }
-    }, 500); // Debounce by 500ms
-
-    return () => clearTimeout(timeoutId);
-  }, [tasks, user, authLoading, loading]);
+  // Note: Auto-save removed - we save manually in each handler for better control
 
   const handleAddTask = () => {
     setEditingTask(null);
@@ -181,21 +166,23 @@ export default function Home() {
   };
 
   const handleToggleComplete = async (taskId: string) => {
+    const previousTasks = tasks;
     const updatedTasks = tasks.map((t) =>
       t.id === taskId ? { ...t, completed: !t.completed } : t
     );
     setTasks(updatedTasks);
     
-    // Save to Supabase (will be handled by useEffect, but save immediately for better UX)
+    // Save to Supabase
     try {
       const updatedTask = updatedTasks.find((t) => t.id === taskId);
       if (updatedTask) {
         await saveTasks([updatedTask]);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating task:", error);
+      showToast(error?.message || "Failed to update task", "error");
       // Revert on error
-      setTasks(tasks);
+      setTasks(previousTasks);
     }
   };
 
