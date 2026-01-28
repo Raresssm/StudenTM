@@ -244,7 +244,7 @@ export default function WeeklyCalendar({
                 No tasks for this day
               </p>
               <p className="text-gray-400 dark:text-gray-500 text-sm">
-                Click "Add Task" to create one
+                Click &quot;Add Task&quot; to create one
               </p>
             </div>
           ) : (

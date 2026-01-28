@@ -24,7 +24,7 @@ export default function TaskNotesPanel({
     } else {
       setNotes("");
     }
-  }, [task?.id, task?.notes]); // Update when task ID or notes change
+  }, [task]); // Update when task changes
 
   const handleSave = () => {
     if (task) {
